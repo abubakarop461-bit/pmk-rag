@@ -267,11 +267,11 @@ export default function ProjectDetailsPage({ params }: PageProps) {
     setError(null);
     try {
       // Fetch project details
-      const projRes = await apiClient.get(`/api/projects/${projectId}`);
+      const projRes = await apiClient.get(`/projects/${projectId}`);
       setProject(projRes.data);
 
       // Fetch project documents
-      const docsRes = await apiClient.get(`/api/documents/project/${projectId}`);
+      const docsRes = await apiClient.get(`/documents/project/${projectId}`);
       setDocuments(docsRes.data);
     } catch (err: any) {
       console.error(err);
@@ -304,7 +304,7 @@ export default function ProjectDetailsPage({ params }: PageProps) {
     }
 
     try {
-      await apiClient.post(`/api/documents/project/${projectId}/upload`, formData, {
+      await apiClient.post(`/documents/project/${projectId}/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -327,7 +327,7 @@ export default function ProjectDetailsPage({ params }: PageProps) {
     setSelectedDoc(doc);
     setLoadingRevisions(true);
     try {
-      const res = await apiClient.get(`/api/documents/${doc.id}/revisions`);
+      const res = await apiClient.get(`/documents/${doc.id}/revisions`);
       setRevisions(res.data);
     } catch (err: any) {
       alert("Failed to load revision history.");
@@ -341,7 +341,7 @@ export default function ProjectDetailsPage({ params }: PageProps) {
       return;
     }
     try {
-      await apiClient.delete(`/api/documents/${id}`);
+      await apiClient.delete(`/documents/${id}`);
       fetchData();
     } catch (err: any) {
       alert(err.response?.data?.detail || "Failed to delete document.");
@@ -627,7 +627,7 @@ export default function ProjectDetailsPage({ params }: PageProps) {
                       const cData = new FormData();
                       cData.append("file", fileObj);
                       try {
-                        const res = await apiClient.post("/api/documents/classify", cData, {
+                        const res = await apiClient.post("/documents/classify", cData, {
                           headers: { "Content-Type": "multipart/form-data" }
                         });
                         const detected = res.data.detected_document_type;

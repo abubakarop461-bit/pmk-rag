@@ -110,7 +110,7 @@ export default function SettingsPage() {
 
   async function loadProjects() {
     try {
-      const res = await apiClient.get<Project[]>("/api/projects");
+      const res = await apiClient.get<Project[]>("/projects");
       setProjects(res.data);
       if (res.data.length > 0) {
         setSelectedProject(res.data[0].id);
@@ -123,7 +123,7 @@ export default function SettingsPage() {
   async function loadAccounts() {
     setLoadingAccounts(true);
     try {
-      const res = await apiClient.get<ConnectorAccount[]>(`/api/connectors/accounts?project_id=${selectedProject}`);
+      const res = await apiClient.get<ConnectorAccount[]>(`/connectors/accounts?project_id=${selectedProject}`);
       setAccounts(res.data);
       if (res.data.length > 0) {
         setActiveAccount(res.data[0]);
@@ -141,7 +141,7 @@ export default function SettingsPage() {
     if (!activeAccount) return;
     setLoadingFolders(true);
     try {
-      const res = await apiClient.get<CloudFolder[]>(`/api/connectors/folders/list?account_id=${activeAccount.id}`);
+      const res = await apiClient.get<CloudFolder[]>(`/connectors/folders/list?account_id=${activeAccount.id}`);
       setCloudFolders(res.data);
       if (res.data.length > 0) {
         setSelectedFolderId(res.data[0].id);
@@ -157,7 +157,7 @@ export default function SettingsPage() {
     if (!activeAccount) return;
     setLoadingJobs(true);
     try {
-      const res = await apiClient.get<SyncJob[]>(`/api/connectors/sync/jobs?account_id=${activeAccount.id}`);
+      const res = await apiClient.get<SyncJob[]>(`/connectors/sync/jobs?account_id=${activeAccount.id}`);
       setSyncJobs(res.data);
     } catch (err) {
       console.error("Failed to load sync jobs history", err);
@@ -173,7 +173,7 @@ export default function SettingsPage() {
     }
     setLoadingConnect(true);
     try {
-      await apiClient.post("/api/connectors/connect", {
+      await apiClient.post("/connectors/connect", {
         project_id: selectedProject,
         provider,
         auth_code: authCode,
@@ -193,7 +193,7 @@ export default function SettingsPage() {
     if (!activeAccount || !selectedFolderId) return;
     const folderName = cloudFolders.find((f) => f.id === selectedFolderId)?.name || "Selected Cloud Directory";
     try {
-      const configuredFolder = await apiClient.post("/api/connectors/folders/configure", {
+      const configuredFolder = await apiClient.post("/connectors/folders/configure", {
         account_id: activeAccount.id,
         folder_id: selectedFolderId,
         folder_name: folderName
@@ -210,7 +210,7 @@ export default function SettingsPage() {
   async function handleTriggerSync(folderRowId: string) {
     setSyncingFolderId(folderRowId);
     try {
-      await apiClient.post(`/api/connectors/sync/manual?folder_id=${folderRowId}`);
+      await apiClient.post(`/connectors/sync/manual?folder_id=${folderRowId}`);
       // Polling refresh in 3 seconds to check job updates
       setTimeout(() => {
         loadSyncHistory();

@@ -102,7 +102,7 @@ function ChatContent() {
   const handleSaveRename = async () => {
     if (!activeSessionId || !newTitleVal.trim()) return;
     try {
-      const res = await apiClient.patch<ChatSession>(`/api/chat/session/${activeSessionId}/title?title=${encodeURIComponent(newTitleVal)}`);
+      const res = await apiClient.patch<ChatSession>(`/chat/session/${activeSessionId}/title?title=${encodeURIComponent(newTitleVal)}`);
       setSessions(sessions.map((s) => s.id === activeSessionId ? { ...s, title: res.data.title } : s));
       setEditingTitle(false);
     } catch (err) {
@@ -120,7 +120,7 @@ function ChatContent() {
 
     async function loadProjects() {
       try {
-        const res = await apiClient.get<Project[]>("/api/projects");
+        const res = await apiClient.get<Project[]>("/projects");
         const data = res.data;
         setProjects(data);
         if (data.length > 0) {
@@ -161,7 +161,7 @@ function ChatContent() {
   async function loadSessions() {
     setLoadingSessions(true);
     try {
-      const res = await apiClient.get<ChatSession[]>(`/api/chat/sessions?project_id=${selectedProject}`);
+      const res = await apiClient.get<ChatSession[]>(`/chat/sessions?project_id=${selectedProject}`);
       const data = res.data;
       setSessions(data);
       if (data.length > 0) {
@@ -180,7 +180,7 @@ function ChatContent() {
     if (!activeSessionId) return;
     setLoadingHistory(true);
     try {
-      const res = await apiClient.get<Message[]>(`/api/chat/session/${activeSessionId}/history`);
+      const res = await apiClient.get<Message[]>(`/chat/session/${activeSessionId}/history`);
       setMessages(res.data);
     } catch (err) {
       console.error("Failed to load chat history", err);
@@ -193,7 +193,7 @@ function ChatContent() {
     if (!selectedProject) return;
     const title = `Thread #${sessions.length + 1}`;
     try {
-      const res = await apiClient.post<ChatSession>("/api/chat/session", {
+      const res = await apiClient.post<ChatSession>("/chat/session", {
         project_id: selectedProject,
         title
       });
@@ -209,7 +209,7 @@ function ChatContent() {
     e.stopPropagation();
     if (!confirm("Are you sure you want to delete this chat thread?")) return;
     try {
-      await apiClient.delete(`/api/chat/session/${id}`);
+      await apiClient.delete(`/chat/session/${id}`);
       setSessions(sessions.filter((s) => s.id !== id));
       if (activeSessionId === id) {
         setActiveSessionId(sessions.length > 1 ? sessions.find((s) => s.id !== id)?.id || null : null);
