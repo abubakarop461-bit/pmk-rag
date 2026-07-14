@@ -239,7 +239,10 @@ function ChatContent() {
 
     // Get Auth credentials token from local supabase mappings
     // Fallback URL resolving
-    const token = localStorage.getItem("supabase_session_token") || "";
+    let token = localStorage.getItem("supabase_session_token") || "";
+    if (process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+      token = "demo_token";
+    }
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     const controller = new AbortController();
@@ -259,6 +262,11 @@ function ChatContent() {
         }),
         signal: controller.signal
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Chat request failed: ${response.status} - ${errorText}`);
+      }
 
       if (!response.body) {
         throw new Error("Empty streaming response body.");
@@ -308,6 +316,10 @@ function ChatContent() {
         console.log("Generation aborted by user.");
       } else {
         console.error("RAG stream query failed:", err);
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: `⚠️ Error: ${err.message || "Failed to retrieve streaming response."}` }
+        ]);
       }
     } finally {
       setGenerating(false);
