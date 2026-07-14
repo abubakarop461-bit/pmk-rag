@@ -52,7 +52,7 @@ export default function DashboardPage() {
     setLoadingProjects(true);
     setError(null);
     try {
-      const res = await apiClient.get("/projects");
+      const res = await apiClient.get("/api/projects");
       setProjects(res.data);
     } catch (err: any) {
       console.error(err);
@@ -72,7 +72,7 @@ export default function DashboardPage() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await apiClient.post("/projects", {
+      await apiClient.post("/api/projects", {
         name: projName,
         project_number: projNum,
         client_name: clientName || null,
@@ -99,7 +99,7 @@ export default function DashboardPage() {
       return;
     }
     try {
-      await apiClient.delete(`/projects/${id}`);
+      await apiClient.delete(`/api/projects/${id}`);
       fetchProjects();
     } catch (err: any) {
       alert(err.response?.data?.detail || "Failed to delete project.");

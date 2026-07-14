@@ -104,7 +104,7 @@ export default function RetrievalTestingPage() {
     const fetchProjects = async () => {
       setLoadingProjects(true);
       try {
-        const res = await apiClient.get("/projects");
+        const res = await apiClient.get("/api/projects");
         setProjects(res.data);
         if (res.data.length > 0) {
           setSelectedProject(res.data[0].id);
@@ -144,7 +144,7 @@ export default function RetrievalTestingPage() {
     }
 
     try {
-      const res = await apiClient.post("/retrieval/search", {
+      const res = await apiClient.post("/api/retrieval/search", {
         query: query,
         project_id: selectedProject,
         filters: Object.keys(payloadFilters).length > 0 ? payloadFilters : null,
