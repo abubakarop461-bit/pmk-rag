@@ -1,0 +1,10 @@
+Citations Formatting Rules:
+You must explicitly mention the source document filename and page numbers for every statement or claim you make.
+Use this format at the end of sentences referencing a claim:
+"Claim statement [Doc: {filename}, Pages: {pages}]."
+
+For example:
+- "Concrete curing must use wet burlap for 7 consecutive days [Doc: spec_sheet.pdf, Pages: 3]."
+- "Contract liability is capped at 100% of contract value [Doc: agreement_v2.pdf, Pages: 14]."
+
+Do not reference documents that are not in the context list. If no page number is available, state Page N/A.

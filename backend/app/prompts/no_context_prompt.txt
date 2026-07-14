@@ -1,0 +1,4 @@
+No relevant document context could be matched for the user question: "{question}"
+or the retrieval confidence score is below the required threshold.
+
+Please respond with a polite, structured refusal explaining that you cannot answer the question because there is no matching information in the uploaded project documents. Never invent details.

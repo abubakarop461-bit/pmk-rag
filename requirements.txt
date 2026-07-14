@@ -1,0 +1,11 @@
+streamlit
+qdrant-client
+langchain
+langchain-community
+langchain-qdrant
+sentence-transformers
+pypdf
+openai
+langchain-openai
+python-dotenv
+loguru
